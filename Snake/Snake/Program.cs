@@ -2,30 +2,48 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Snake
 {
     class Program
     {
+        private static object console;
+
         static void Main(string[] args)
         {
-            int x1 = 1;
-            int y1 = 3;
-            char sym1 = '*';
-            Draw(x1, y1, sym1);
+            Console.SetBufferSize(80, 80);
+            Console.SetWindowSize(80, 80);
+           
+           //Отрисовка рамочек
+            HorizontalLine LeftLine = new HorizontalLine(0,79,0,'#');
+            LeftLine.Draw();
+            HorizontalLine RightLine = new HorizontalLine(0,79, 78, '#');
+            RightLine.Draw();
+            VerticalLine UpLine = new VerticalLine(79, 0,78, '#');
+            UpLine.Draw();
+            VerticalLine DownLine = new VerticalLine(0, 0, 78, '#');
+            DownLine.Draw();
 
-            int x2 = 4;
-            int y2 = 5;
-            char sym2 = '#';
-            Draw(x2, y2, sym2);
+            //Отрисовка точек
+            Point p = new Point(4, 7, '*');
+            Snake Snake = new Snake(p, 4, Direction.RIGHT);
+            Snake.Draw();
+
+            while (true)
+            {
+                if (Console.KeyAvailable)
+                {
+                    ConsoleKeyInfo key = Console.ReadKey();
+                    Snake.HandleKey(key.Key);
+                }
+                Thread.Sleep(100);
+                Snake.Move();
+            }
+          
 
             Console.ReadLine();
         }
-        static void Draw(int x, int y, char sym)
-        {
-        Console.SetCursorPosition(x, y);
-        Console.Write(sym);
-}
-}
+     }
 }
